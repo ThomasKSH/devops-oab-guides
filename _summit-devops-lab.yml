@@ -26,6 +26,7 @@ vars:
 modules:
   activate:
   - devops-intro
+  - app-description
   - create-dev
   - add-pipeline
   - add-webhook

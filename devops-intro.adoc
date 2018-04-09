@@ -2,7 +2,7 @@
 
 In this section we will give an overview of DevOps, Continuous Integration and Continuous Delivery concepts which are required throughout this session.
 
-#### What is DevOps?
+### What is DevOps?
 DevOps is a combination of development and operations principles in order to create a culture that emphasize communication, collaboration, and cohesion between the traditionally separate developer and IT operations teams. Rather than seeing these as two distinct groups who are responsible for their specific tasks but don’t really work together, the DevOps methodology recognizes the interdependence of the two groups. By integrating these functions as one team or department, DevOps helps an organization deploy software more frequently, while maintaining service stability and gaining the speed necessary for more innovation.
 
 In a DevOps environment, cross-functionality, shared responsibilities, and trust are all promoted.
@@ -29,36 +29,25 @@ image::devops-intro-openshift-arch.png[OpenShift Architecture]
 
 OpenShift builds a developer-centric workflow around Docker containers and Kubernetes runtime concepts. There are few concepts you need to be familiar with when using OpenShift:
 
-_Container_: Linux containers are lightweight mechanisms for isolating running processes so that they are limited to interacting with only their designated resources.
+* *_Container_*: Linux containers are lightweight mechanisms for isolating running processes so that they are limited to interacting with only their designated resources.
 
-_Image_: a binary that includes all of the requirements for running a single container, as well as metadata describing its needs and capabilities.
+* *_Image_*: a binary that includes all of the requirements for running a single container, as well as metadata describing its needs and capabilities.
 
-_Image Registry_: a service for storing and retrieving docker-formatted container images. A registry contains a collection of one or more image repositories.
+* *_Image Registry_*: a service for storing and retrieving docker-formatted container images. A registry contains a collection of one or more image repositories.
 
-_Pod_: one or more containers deployed together on one host, and the smallest compute unit that can be defined, deployed, and managed.
+* *_Pod_*: one or more containers deployed together on one host, and the smallest compute unit that can be defined, deployed, and managed.
 
-_Image Stream_: lets you easily tag, import, and publish docker images from the integrated image registry in OpenShift.
+* *_Image Stream_*: lets you easily tag, import, and publish docker images from the integrated image registry in OpenShift.
 
-_Build Config_: allows you to launch docker builds, build directly from source code or application binary, or trigger Jenkins Pipeline jobs whenever an image stream tag is updated. 
+* *_Build Config_*: allows you to launch docker builds, build directly from source code or application binary, or trigger Jenkins Pipeline jobs whenever an image stream tag is updated. 
 
-_Deployment Config_: allows you to redeploy whenever a new image becomes available.
+* *_Deployment Config_*: allows you to redeploy whenever a new image becomes available.
 
-_Service_: an internal load balancer which identifies a set of pods in order to proxy the connections it receives to them. Backing pods can be added to or removed from a service arbitrarily while the service remains consistently available, enabling anything that depends on the service to refer to it at a consistent address.
+* *_Service_*: an internal load balancer which identifies a set of pods in order to proxy the connections it receives to them. Backing pods can be added to or removed from a service arbitrarily while the service remains consistently available, enabling anything that depends on the service to refer to it at a consistent address.
 
-_Route_: make it trivial to expose your Kubernetes services via a public DNS name.
+* *_Route_*: make it trivial to expose your Kubernetes services via a public DNS name.
 
-_Template_: describes a set of objects (pods, build configs, deployment configs, etc) that can be parameterized and processed to produce a list of objects for creation by OpenShift.
+* *_Template_*: describes a set of objects (pods, build configs, deployment configs, etc) that can be parameterized and processed to produce a list of objects for creation by OpenShift.
 
 As an administrator, you can enable your developers to request new Projects which come with predefined roles, quotas, and security controls to fairly divide access.
 
-#### CoolStore Application
-
-CoolStore is a fully functional online shop application for selling Red Hat merchandise products and is used in the following labs to build and deploy through the CI/CD pipeline.
-
-image::devops-intro-coolstore.png[CoolStore Webshop]
-
-CoolStore is built using Spring Boot for the backend Catalog service and Node.js and AngularJS for the front-end Web-UI.
-
-image::devops-intro-coolstore-arch.png[CoolStore Architecture]
-
-In this lab session, you will create a Continuous Delivery pipeline to automate test and deployment of the Catalog service for every code and configuration change all the way to production.

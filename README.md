@@ -9,7 +9,7 @@ The lab application used in this workshop is available at https://github.com/ope
 * Create DEV Environment
 * Create a Deployment Pipeline
 * Running the CI/CD Pipeline on Every Change
-* Automate Provisioning Traditional Databases on VMs 
+* Automate Provisioning Traditional Databases on VMs
 * Create PROD Environment
 * Promote Releases to Production
 * Zero-Downtime Deployment in Production
@@ -21,10 +21,10 @@ The lab application used in this workshop is available at https://github.com/ope
 $ git clone https://github.com/openshift-labs/devops-oab-guides.git
 $ cd devops-oab-guides
 
-$ docker run -p 8080:8080 -v $(pwd):/app-data \
+$ docker run --rm -it -p 8080:8080 -v $(pwd):/app-data \
               -e CONTENT_URL_PREFIX="file:///app-data" \
-              -e WORKSHOPS_URLS="file:///app-data/_devops-workshop.yml" \
-              osevg/workshopper:latest 
+              -e WORKSHOPS_URLS="file:///app-data/_summit-devops-lab.yml" \
+              osevg/workshopper:latest
 ```
 
 # Deploy Guides on OpenShift

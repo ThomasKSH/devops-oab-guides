@@ -1,0 +1,11 @@
+## CoolStore Application
+
+CoolStore is a fully functional online shop application for selling Red Hat merchandise products and is used in the following labs to build and deploy through the CI/CD pipeline.
+
+image::devops-intro-coolstore.png[CoolStore Webshop]
+
+CoolStore is built using Spring Boot for the backend Catalog service and Node.js and AngularJS for the front-end Web-UI.
+
+image::devops-intro-coolstore-arch.png[CoolStore Architecture]
+
+In this lab session, you will create a Continuous Delivery pipeline to automate test and deployment of the Catalog service for every code and configuration change all the way to production.

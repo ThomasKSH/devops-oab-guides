@@ -1,0 +1,7 @@
+- Red hat OpenJDK imagestream needs to be installed
+
+- In lab create-dev we assume the user will have access to a machine that has 
+the oc cli installed. If this is not the case, we need to add a lab on
+installing the oc cli.
+
+- Fix PROJECT_SUFFIX and OPENSHIFT_USER to make it more reusable.

@@ -1,6 +1,8 @@
 modules:
   devops-intro:
     name: DevOps Introduction  
+  app-description:
+    name: Application architecture 
   create-dev:
     name: Create DEV Environment
   add-pipeline:

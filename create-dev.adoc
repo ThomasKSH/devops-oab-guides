@@ -4,7 +4,7 @@ In this lab you will get familiar with OpenShift Web Console and OpenShift CLI a
 interacting with an OpenShift cluster. You will also learn about deployment environments in 
 software delivery lifecycle and deploy the application into these deployment environments.
 
-#### OpenShift CLI
+### OpenShift CLI
 
 The first thing we want to do to ensure that the `oc` command line tools was installed and successfully 
 added to your path. In order to login, you can use the `oc` command and then specify the server that you want to authenticate to. Issue the following command:
@@ -12,6 +12,14 @@ added to your path. In order to login, you can use the `oc` command and then spe
 [source,shell,role=copypaste]
 ----
 oc login {{OPENSHIFT_URL}}
+----
+
+You may see the following output:
+
+----
+The server uses a certificate signed by an unknown authority.
+You can bypass the certificate check, but any data you send to the server could be intercepted by others.
+Use insecure connections? (y/n):
 ----
 
 Enter *Y* to use a potentially insecure connection. The reason you received this message is because 
@@ -27,6 +35,15 @@ CAUTION: Replace `{{PROJECT_SUFFIX}}` with the number provided to you by the ins
 
 * Username: `{{OPENSHIFT_USER}}`
 * Password: `{{OPENSHIFT_PASSWORD}}`
+
+
+Once you have authenticated to the OpenShift server, you will a confirmation message to the following:
+
+----
+Login successful.
+
+Using project ....
+----
 
 Projects are a top level concept to help you organize your deployments. An OpenShift 
 project allows a community of users (or a user) to organize and manage their content in 
@@ -53,18 +70,19 @@ Specify the DEV project as the active project:
 oc project dev{{PROJECT_SUFFIX}}
 ----
 
-#### OpenShift Web Console
+### OpenShift Web Console
 
 OpenShift ships with a web-based console that will allow users to perform various tasks via a browser. To 
 get a feel for how the web console works, open your browser and go to the following URL: {{OPENSHIFT_URL}}
 
-Since the security certificates used for securing your OpenShift cluster are self-generated and 
-self-signed, your browser will not trust them by default and will show a security warning similar to the following:
+In case your security certificates used for securing your OpenShift cluster are self-generated and 
+self-signed, your browser will not trust them by default and your browser will prompt you with a security warning similar to the following:
 
 image::devops-explore-cert-warning-firefox.png[Firebox Untrusted Certificate]
 
 In Chrome browser, click on *ADVANCED* and then *Proceed to ... (unsafe)* to trust the 
-certificates. In Firefox browser, click on *Advanced* button, then *Add Exception...* and then 
+certificates. 
+In Firefox browser, click on *Advanced* button, then *Add Exception...* and then 
 confirm trusting the certificate by click on *Confirm Security Exception*.
 
 The first screen you will see is the authentication screen. Enter in the following credentials:
@@ -79,56 +97,102 @@ image::devops-explore-web-login.png[OpenShift Login]
 After you have authenticated to the web console, you will be presented with a list of 
 projects that your user has permission to work with.
 
-#### Deployment Environments
+image::devops-explore-projectlist.png[OpenShift Initial view]
 
-Download source code for the CoolStore application from GitHub:
+### Deployment Environments
+
+In this lab we're going to start creating our application as a developer. When we log in into the appropriate project we see an empty overview page. This is because we have not started our project yet.
+
+image::devops-dev-empty-env.png[Empty Development environment]
+
+Let's add our application to our project.
+
+#### Add your application source
+
+For this lab, no coding will be required. We do provide all the neccesary source code, as it is not the purpose of this workshop to teach you how to develop but to show you how to do Continuous Delivery with OpenShift.
+
+Download the source code for our application from GitHub:
 
 [source,shell,role=copypaste]
 ----
 wget https://github.com/openshift-labs/devops-oab-labs/archive/master.tar.gz
 tar xvfz master.tar.gz
 mv devops-oab-labs-master/* .
-rm -rf devops-oab-labs-master
+rm -rf devops-oab-labs-master master.tar.gz
 ----
 
+NOTE: We assume that all the commands we show will be executed from the same folder, so we include all the cd (change directory) commands.
 
-Register an account on the git server: http://{{GIT_HOSTNAME}}
+As any developer, we want our application code to live under source control. For this purpose, we do provide a Git solution hosted in the OpenShift environment and accesible at:
+
+----
+http://{{GIT_HOSTNAME}}
+----
+
+Let's create an account there. Use the following credentials:
 
 * Username: `{{GIT_USER}}`
-* Email: `{{GIT_USER}}@gogs.com`
+* Email: `{{GIT_USER}}@example.com`
 * Password: `{{GIT_PASSWORD}}`
 
-Create a Git repository for the Catalog service: `catalog-spring-boot`
+image::devops-dev-create-git-account.png[Create git account]
 
-Import the Catalog service source code into the Git repository on Gogs:
+Once the user has been created, you'll be prompted to log in. Use the user you just created.
+
+image::devops-dev-git-login.png[Login to your git account]
+
+Selecting from the *+* menu on the top navigation bar, create a new repository:
+
+image::devops-dev-git-create-repo-menu.png[Create a ne wrepo]
+
+You're going to create a new repository for the Catalog service: `catalog-spring-boot`
+
+image::devops-dev-git-create-repo.png[Create a new repo]
+
+Omce the repository has been created, note the URL where you would clone
+this repository from:
+
+image::devops-dev-git-new-repo-created.png[Catalog repo created]
+
+Now, import the Catalog service source code into this new git repository:
 
 [source,shell,role=copypaste]
 ----
 cd catalog-spring-boot
-git config --global user.name "rhdeveloper"
-git config --global user.email "rhdeveloper@me.com"
 git init
+git config --local user.name "{{GIT_USER}}"
+git config --local user.email "{{GIT_USER}}@example.com"
 git add . --all
 git commit -m "initial add"
 git remote add origin http://{{GIT_USER}}:{{GIT_PASSWORD}}@{{GIT_HOSTNAME}}/{{GIT_USER}}/catalog-spring-boot.git
 git push -u origin master
 ----
 
+WARNING: Replace the URL with the one for your repository if they don't match what is shown here
+
+Follow the same steps now to create the web UI component.
 
 Create a Git repository for the Web UI: `web-nodejs`
 
-Import the Web UI source code into the Git repository on Gogs:
+image::devops-dev-git-create-repo-web.png[Create a new repo]
+
+Import the Web UI source code into the git repository:
 
 [source,shell,role=copypaste]
 ----
 cd ../web-nodejs
 git init
+git config --local user.name "{{GIT_USER}}"
+git config --local user.email "{{GIT_USER}}@example.com"
 git add . --all
 git commit -m "initial add"
 git remote add origin http://{{GIT_USER}}:{{GIT_PASSWORD}}@{{GIT_HOSTNAME}}/{{GIT_USER}}/web-nodejs.git
 git push -u origin master
 ----
 
+image::devops-dev-git-repositories.png[Repositories]
+
+#### Deploy your application
 
 The container images built for Catalog and Web UI will be stored in the `cicd{{PROJECT_SUFFIX}}` project and 
 deployed from there across various environments. 
@@ -143,13 +207,15 @@ oc create -f https://raw.githubusercontent.com/openshift-labs/devops-oab-labs/ma
 
 Deploy the Catalog service into the DEV environment:
 
-[source,shell,role=copypaste]
+[source,shell]
 ----
 oc new-app -f https://raw.githubusercontent.com/openshift-labs/devops-oab-labs/master/openshift/catalog-template.yaml \
       --param=GIT_URI=http://{{GIT_HOSTNAME}}/{{GIT_USER}}/catalog-spring-boot.git \
       --param=MAVEN_MIRROR_URL={{NEXUS_URL}} \
-      --param=IMAGE_NAMESPACE=cicd{{PROJECT_SUFFIX}}
+      --param=IMAGE_NAMESPACE=cicd{{PROJECT_SUFFIX}} -n dev{{PROJECT_SUFFIX}}
 ----
+
+WARNING: Adjust the values to your specific configuration
 
 Deploy the Web UI service into the DEV environment:
 
@@ -157,7 +223,25 @@ Deploy the Web UI service into the DEV environment:
 ----
 oc new-app -f https://raw.githubusercontent.com/openshift-labs/devops-oab-labs/master/openshift/web-template.yaml \
       --param=GIT_URI=http://{{GIT_HOSTNAME}}/{{GIT_USER}}/web-nodejs.git \
-      --param=IMAGE_NAMESPACE=cicd{{PROJECT_SUFFIX}} 
+      --param=IMAGE_NAMESPACE=cicd{{PROJECT_SUFFIX}} -n dev{{PROJECT_SUFFIX}}
 ----
 
-Point your browser to the Web UI route url
+WARNING: Adjust the values to your specific configuration
+
+Builds will take some time. Be patient!!!
+
+image::devops-dev-builds.png[Builds in Dev]
+
+You will notice that the application has been succesfully deployed when you see for every
+deployment a blue doughnut on the side.
+
+image::devops-dev-deployments.png[Deployments in Dev]
+
+Now it is time to access your application in development. Point your browser to the Web UI route url
+located on the web UI deployment:
+
+image::devops-dev-web-uri.png[Deployments in Dev]
+
+You should see your Coolstore application.
+
+image::devops-dev-web.png[Coolstore in Dev]
